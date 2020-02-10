@@ -1,3 +1,9 @@
+"""WORK IN PROGRESS
+
+TO DO: Wrap functions into class
+Use dictionary instead of pandas"""
+
+import argparse
 import pandas as pd
 from pandas.io.json import json_normalize
 import sys
@@ -53,4 +59,5 @@ else:
     rank = int(rank)
 
 if __name__ == "__main__":
-    print(f"{library}   {address}   {rank}")
+    #print(f"{library}   {address}   {rank}")
+    print(libs_json)
