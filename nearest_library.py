@@ -3,19 +3,26 @@
 TO DO: Wrap functions into class
 Use dictionary instead of pandas"""
 
-# import argparse
-# import pandas as pd
-# from pandas.io.json import json_normalize
-# import sys
-# from sodapy import Socrata
-# from math import cos, asin, sqrt, isnan
+import argparse
+import os
+import pandas as pd
+import sys
+from sodapy import Socrata
+from math import cos, asin, sqrt, isnan
+from dotenv import load_dotenv
+
+load_dotenv() # Contains APP_TOKEN as environment variable from .env file
+API_BASE: str = 'data.cityofchicago.org'
+API_ENDPOINT: str = 'x8fc-8rcq'
+APP_TOKEN: str = os.environ['APP_TOKEN']
+
+def connect_api(base:str=API_BASE, endpoint: str=API_ENDPOINT, token: str=APP_TOKEN):
+    client = Socrata(base, token)
+    result = client.get(endpoint)
+    return result
 
 # if len(sys.argv) > 1:
 #     point = (float(sys.argv[1]), float(sys.argv[2]))
-
-# # Set up API
-
-# client = Socrata("data.cityofchicago.org", None)
 
 # # Load and clean data
 
@@ -58,6 +65,9 @@ def distance(lat2, lon2):
 # else: 
 #     rank = int(rank)
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
+    output = connect_api(API_BASE, API_ENDPOINT, APP_TOKEN)
+    #output = type(APP_TOKEN)
+    print(pd.DataFrame.from_records(output))
 #     #print(f"{library}   {address}   {rank}")
 #     print(libs_json)
