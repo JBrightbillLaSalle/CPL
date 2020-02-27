@@ -21,6 +21,21 @@ def connect_api(base:str=API_BASE, endpoint: str=API_ENDPOINT, token: str=APP_TO
     result = client.get(endpoint)
     return result
 
+def distance(lat2, lon2):
+    """Function to find distance"""
+    #lat1, lon1 = row['Lat'], row['Lon']
+    p = 0.017453292519943295     #Pi/180
+    a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * \
+        cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+    return 12742 * asin(sqrt(a)) #2*R*asin...
+
+
+
+df = connect_api(API_BASE, API_ENDPOINT, APP_TOKEN)
+
+df['Distance'] = df.apply(distance, axis=1)
+closest = df[df['Distance'] == df['Distance'].min()]
+
 # if len(sys.argv) > 1:
 #     point = (float(sys.argv[1]), float(sys.argv[2]))
 
@@ -47,16 +62,8 @@ def connect_api(base:str=API_BASE, endpoint: str=API_ENDPOINT, token: str=APP_TO
 
 # Find closest location using Haversine formula
 
-def distance(lat2, lon2):
-    """Function to find distance"""
-    #lat1, lon1 = row['Lat'], row['Lon']
-    p = 0.017453292519943295     #Pi/180
-    a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * \
-        cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
-    return 12742 * asin(sqrt(a)) #2*R*asin...
 
-# df['Distance'] = df.apply(distance, axis=1)
-# closest = df[df['Distance'] == df['Distance'].min()]
+
 # library, address, rank = closest.iloc[0]['Name'], closest.iloc[0]['Address'], \
 #     closest.iloc[0]['Rank']
 
@@ -66,7 +73,7 @@ def distance(lat2, lon2):
 #     rank = int(rank)
 
 if __name__ == "__main__":
-    output = connect_api(API_BASE, API_ENDPOINT, APP_TOKEN)
+    
     #output = type(APP_TOKEN)
     print(pd.DataFrame.from_records(output))
 #     #print(f"{library}   {address}   {rank}")
